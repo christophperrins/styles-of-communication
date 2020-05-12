@@ -229,13 +229,13 @@ let choices = (() => {
     heading.innerText = "Your results:"
     let list = document.createElement("ul");
     let actions = document.createElement("li");
-    actions.innerText = "Actions: " + communicationStyles.getAction() / questions.getNumberOfQuestions() * 100 + "%";
+    actions.innerText = "Actions: " + parseInt(communicationStyles.getAction() / questions.getNumberOfQuestions() * 100) + "%";
     let process = document.createElement("li");
-    process.innerText = "Process: " + communicationStyles.getProcess() / questions.getNumberOfQuestions() * 100 + "%";
+    process.innerText = "Process: " + parseInt(communicationStyles.getProcess() / questions.getNumberOfQuestions() * 100) + "%";
     let people = document.createElement("li");
-    people.innerText = "People: " + communicationStyles.getPeople() / questions.getNumberOfQuestions() * 100 + "%";
+    people.innerText = "People: " + parseInt(communicationStyles.getPeople() / questions.getNumberOfQuestions() * 100) + "%";
     let ideas = document.createElement("li");
-    ideas.innerText = "Ideas: " + communicationStyles.getIdeas() / questions.getNumberOfQuestions() * 100 + "%";
+    ideas.innerText = "Ideas: " + parseInt(communicationStyles.getIdeas() / questions.getNumberOfQuestions() * 100) + "%";
   
     list.append(actions);
     list.append(process);
