@@ -220,6 +220,34 @@ let choices = (() => {
     choicesRow.append(col);
   }
 
+  let displayResults = () => {
+    let row = document.getElementById("choices")
+    row.id = "results";
+    let col = document.createElement("div");
+    col.className = "col-12";
+    let heading = document.createElement("h3");
+    heading.innerText = "Your results:"
+    let list = document.createElement("ul");
+    let actions = document.createElement("li");
+    actions.innerText = "Actions: " + communicationStyles.getAction() / questions.getNumberOfQuestions() * 100 + "%";
+    let process = document.createElement("li");
+    process.innerText = "Process: " + communicationStyles.getProcess() / questions.getNumberOfQuestions() * 100 + "%";
+    let people = document.createElement("li");
+    people.innerText = "People: " + communicationStyles.getPeople() / questions.getNumberOfQuestions() * 100 + "%";
+    let ideas = document.createElement("li");
+    ideas.innerText = "Ideas: " + communicationStyles.getIdeas() / questions.getNumberOfQuestions() * 100 + "%";
+  
+    list.append(actions);
+    list.append(process);
+    list.append(people);
+    list.append(ideas);
+    
+    col.append(heading);
+    col.append(list);
+  
+    row.append(col)
+  }
+
   let createButtons = () => {
     let numberOfOptions = questions.getNumberOfOptions();
     if (numberOfOptions > 0) {
@@ -235,33 +263,7 @@ let choices = (() => {
   
 })()
 
-let displayResults = () => {
-  let row = document.getElementById("choices")
-  row.id = "results";
-  let col = document.createElement("div");
-  col.className = "col-12";
-  let heading = document.createElement("h3");
-  heading.innerText = "Your results:"
-  let list = document.createElement("ul");
-  let actions = document.createElement("li");
-  actions.innerText = "Actions: " + communicationStyles.getAction() / questions.getNumberOfQuestions() * 100 + "%";
-  let process = document.createElement("li");
-  process.innerText = "Process: " + communicationStyles.getProcess() / questions.getNumberOfQuestions() * 100 + "%";
-  let people = document.createElement("li");
-  people.innerText = "People: " + communicationStyles.getPeople() / questions.getNumberOfQuestions() * 100 + "%";
-  let ideas = document.createElement("li");
-  ideas.innerText = "Ideas: " + communicationStyles.getIdeas() / questions.getNumberOfQuestions() * 100 + "%";
 
-  list.append(actions);
-  list.append(process);
-  list.append(people);
-  list.append(ideas);
-  
-  col.append(heading);
-  col.append(list);
-
-  row.append(col)
-}
 
 
 
