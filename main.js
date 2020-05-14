@@ -1,4 +1,7 @@
-
+/**
+ * function to keep track of orientations.
+ * @returns 
+ */
 let communicationStyles = (() => {
   let action = 0;
   let process = 0;
@@ -213,7 +216,6 @@ let questions = (() => {
 })();
 
 let choices = (() => {
-
   let colour = (i) => i % 2 == 0 ? "btn-primary" : "btn-secondary";
 
   let choicesRow = document.getElementById("choices");
@@ -224,10 +226,9 @@ let choices = (() => {
     col.className = "col-lg-6 col-sm-12 my-2";
     let button = document.createElement("button");
     button.className = "btn " + colour(i) + " w-100";
-    let option = questions.getOption(i);
-    button.innerText = option.value;
+    button.innerText = questions.getOption(i).value;
     button.addEventListener("click", () => {
-      option.action();
+      questions.getOption(i).action();
       questions.next();
       choicesRow.innerHTML = "";
       createButtons();
@@ -272,33 +273,39 @@ let choices = (() => {
     }
     character.innerHTML = "You are a <b>" + orientation + "</b> orientated individual";
 
-    let orientationButton = (() => {
+    let createOrientationButton = (() => {
       let numberCreated = 0;
-      let getType = () => numberCreated % 2 ? "btn-primary" : "btn-secondary";
-      return {
-        create: () => {
+      return () => {
+          let getType = () => numberCreated == 1 || numberCreated == 4 ? "btn-primary" : "btn-secondary";
           numberCreated = numberCreated + 1;
           let button = document.createElement("button");
-          button.className = "btn " + getType() + " m-1 d-block";
+          button.className = "btn " + getType() + " my-1 w-50";
           return button
         }
-      }
     })(); 
 
     
-    let actions = orientationButton.create();
-    let convert = (value) => Math.round(value / questions.getNumberOfQuestions() * 100);
-    actions.innerText = "Actions: " + convert(communicationStyles.getAction()) + "%";
-    let process = orientationButton.create();
-    process.innerText = "Process: " + convert(communicationStyles.getProcess()) + "%";
-    let people = orientationButton.create();
-    people.innerText = "People: " + convert(communicationStyles.getPeople()) + "%";
-    let ideas = orientationButton.create();
-    ideas.innerText = "Ideas: " + convert(communicationStyles.getIdeas()) + "%";
+    let calculatePercentage = (value) => Math.round(value / questions.getNumberOfQuestions() * 100);
+    
+    let actions = createOrientationButton();
+    actions.innerText = "Actions: " + calculatePercentage(communicationStyles.getAction()) + "%";
+    actions.addEventListener("click", () => infoDisplay().action());
+
+    let process = createOrientationButton();
+    process.innerText = "Process: " + calculatePercentage(communicationStyles.getProcess()) + "%";
+    process.addEventListener("click", () => infoDisplay().process());
+
+    let people = createOrientationButton();
+    people.innerText = "People: " + calculatePercentage(communicationStyles.getPeople()) + "%";
+    people.addEventListener("click", () => infoDisplay().people());
+
+    let ideas = createOrientationButton();
+    ideas.innerText = "Ideas: " + calculatePercentage(communicationStyles.getIdeas()) + "%";
+    ideas.addEventListener("click", () => infoDisplay().ideas());
 
     let infoPanel = document.createElement("div");
     infoPanel.className = "col-lg-6 col-sm-12";
-    
+
     let clearDisplay = () => {
       infoPanel.innerHTML = "";
     }
@@ -309,60 +316,60 @@ let choices = (() => {
       infoPanel.append(title);
     }
 
-    let addToList = (value) => {
+    let createListItem = (value) => {
       let listItem = document.createElement("li");
-      listItem.innerHTML = value;
+      listItem.innerText = value;
       return listItem;
     }
 
     let displayAction = () => {
       displayHeading("an Action");
       let list = document.createElement("ul");
-      list.append(addToList("Focus on the results first (state the conclusion at the outset)"));
-      list.append(addToList("State your best recommendation (do not offer many alternatives)"));
-      list.append(addToList("Be as brief as possible"));
-      list.append(addToList("Emphasize the practicality of your ideas"));
-      list.append(addToList("Use visual aids"));
+      list.append(createListItem("Focus on the results first (state the conclusion at the outset)"));
+      list.append(createListItem("State your best recommendation (do not offer many alternatives)"));
+      list.append(createListItem("Be as brief as possible"));
+      list.append(createListItem("Emphasize the practicality of your ideas"));
+      list.append(createListItem("Use visual aids"));
       infoPanel.append(list);
     }
 
     let displayProcess = () => {
       displayHeading("a Process");
       let list = document.createElement("ul");
-      list.append(addToList("Be precise (state the facts)"));
-      list.append(addToList("Organize your presentation in a logical order:"));
+      list.append(createListItem("Be precise (state the facts)"));
+      list.append(createListItem("Organize your presentation in a logical order:"));
       let sublist = document.createElement("ul");
-      sublist.append(addToList("Background"));
-      sublist.append(addToList("Present situation"));
-      sublist.append(addToList("Outcome"));
+      sublist.append(createListItem("Background"));
+      sublist.append(createListItem("Present situation"));
+      sublist.append(createListItem("Outcome"));
       list.append(sublist);
-      list.append(addToList("Break down your recommendations"));
-      list.append(addToList("Include options (consider alternatives) with pros and cons"));
-      list.append(addToList("Do not rush a process-oriented person"));
-      list.append(addToList("Outline your proposal (1, 2, 3...)"));
+      list.append(createListItem("Break down your recommendations"));
+      list.append(createListItem("Include options (consider alternatives) with pros and cons"));
+      list.append(createListItem("Do not rush a process-oriented person"));
+      list.append(createListItem("Outline your proposal (1, 2, 3...)"));
       infoPanel.append(list);
     }
 
     let displayPeople = () => {
       displayHeading("a People");
       let list = document.createElement("ul");
-      list.append(addToList("Allow for small talk (do not start the discussion right away)"));
-      list.append(addToList("Stress the relationships between your proposal and the people concerned"));
-      list.append(addToList("Show how the idea worked well in the past"));
-      list.append(addToList("Indicate support from well-respected people"));
-      list.append(addToList("Use an informal writing style"));
+      list.append(createListItem("Allow for small talk (do not start the discussion right away)"));
+      list.append(createListItem("Stress the relationships between your proposal and the people concerned"));
+      list.append(createListItem("Show how the idea worked well in the past"));
+      list.append(createListItem("Indicate support from well-respected people"));
+      list.append(createListItem("Use an informal writing style"));
       infoPanel.append(list);
     }
 
     let displayIdea = () => {
       displayHeading("an Idea");
       let list = document.createElement("ul");
-      list.append(addToList("Allow enough time for discussion"));
-      list.append(addToList("Do not get impatient when he or she goes off on tangents"));
-      list.append(addToList("In your opening, try to relate the discussed topic to a broader concept or idea (in other words, be conceptual"))
-      list.append(addToList("Stress the uniqueness of the idea or topic at hand"));
-      list.append(addToList("Emphasize future value or relate the impact of the idea to the future"));
-      list.append(addToList("If writing to an idea-oriented person, try to stress the key concepts that underlie your proposal or recommendation at the outset. Start with an overall statement and work toward the more particular."));
+      list.append(createListItem("Allow enough time for discussion"));
+      list.append(createListItem("Do not get impatient when he or she goes off on tangents"));
+      list.append(createListItem("In your opening, try to relate the discussed topic to a broader concept or idea (in other words, be conceptual"))
+      list.append(createListItem("Stress the uniqueness of the idea or topic at hand"));
+      list.append(createListItem("Emphasize future value or relate the impact of the idea to the future"));
+      list.append(createListItem("If writing to an idea-oriented person, try to stress the key concepts that underlie your proposal or recommendation at the outset. Start with an overall statement and work toward the more particular."));
       infoPanel.append(list);
     }
 
@@ -376,13 +383,7 @@ let choices = (() => {
       }
     }
 
-    actions.addEventListener("click", () => infoDisplay().action());
-    process.addEventListener("click", () => infoDisplay().process());
-    people.addEventListener("click", () => infoDisplay().people());
-    ideas.addEventListener("click", () => infoDisplay().ideas());
-
     let canvas = document.createElement("canvas");
-    canvas.width = "100";
     let chart = new Chart(canvas, {
       type: "pie",
       data: {
@@ -390,10 +391,10 @@ let choices = (() => {
         datasets: [{
           backgroundColor: ["#ffC000", "#4472C4", "#ed7d31", "#a5a5a5"],
           data: [
-            convert(communicationStyles.getAction()),
-            convert(communicationStyles.getProcess()),
-            convert(communicationStyles.getPeople()),
-            convert(communicationStyles.getIdeas())
+            calculatePercentage(communicationStyles.getAction()),
+            calculatePercentage(communicationStyles.getProcess()),
+            calculatePercentage(communicationStyles.getPeople()),
+            calculatePercentage(communicationStyles.getIdeas())
           ]
         }]
       }
@@ -406,6 +407,9 @@ let choices = (() => {
     results.append(process);
     results.append(people);
     results.append(ideas);
+    let para = document.createElement("p");
+    para.innerText = "Click the buttons above to learn more";
+    results.append(para);
     results.append(canvas);
 
     row.append(results);
